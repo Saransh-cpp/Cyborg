@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:cyborg/main.dart';
 import 'package:flutter/material.dart';
+import 'package:tflite/tflite.dart';
 
 class CyborgScreen extends StatefulWidget {
   @override
@@ -13,6 +14,13 @@ class _CyborgScreenState extends State<CyborgScreen> {
   String results = "";
   CameraController cameraController;
   CameraImage cameraImage;
+
+  loadModel() async {
+    await Tflite.loadModel(
+        model: 'mobilenet_v1_1.0_224.tflite',
+        labels: 'mobilenet_v1_1.0_224.txt'
+    );
+  }
 
   initCamera() {
     cameraController = CameraController(cameras[0], ResolutionPreset.medium);
@@ -30,6 +38,19 @@ class _CyborgScreenState extends State<CyborgScreen> {
         });
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadModel();
+  }
+
+  @override
+  void dispose() async{
+    super.dispose();
+    await Tflite.close();
+    cameraController.dispose();
   }
 
   @override
