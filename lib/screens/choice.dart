@@ -1,3 +1,4 @@
+import 'package:cyborg/screens/static_image_classification.dart';
 import 'package:cyborg/screens/two_objects_realtime_identification.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,10 @@ class _ChoiceState extends State<Choice> {
               ),
               FlatButton(
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => ImageClassification()));
+                  },
                   child: Text('Image Detection')
               ),
               FlatButton(
