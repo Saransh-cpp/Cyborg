@@ -21,8 +21,8 @@ class _CyborgScreenState extends State<CyborgScreen> {
         return;
       }
       
-      setState(() {
-        cameraController.startImageStream((image) => {
+      setState(()  {
+         cameraController.startImageStream((image) => {
           if(!isWorking){
             isWorking = true,
             cameraImage = image,
@@ -34,42 +34,69 @@ class _CyborgScreenState extends State<CyborgScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-                color: Colors.blue,
-                height: MediaQuery.of(context).size.height/3,
-                child: Center(
-                  child: FlatButton(
-                    child: cameraImage == null ? Text(
-                      'Press'
-                    ) :
-                    AspectRatio(
-                        aspectRatio: cameraController.value.aspectRatio,
-                      child: CameraPreview(cameraController),
-                    ),
+    return MaterialApp(
+      home: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: Container(
+            height: MediaQuery
+                .of(context)
+                .size
+                .height / 12,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                    icon: Icon(Icons.camera),
                     onPressed: () {
-                      initCamera();
-                    },
-                  ),
+                      setState(() {
+                        initCamera();
+                      });
+                    }
                 ),
-              ),
-              Container(
-                color: Colors.pink,
-                height: MediaQuery.of(context).size.height/2,
-                child: Center(
-                  child: FlatButton(
-                    child: Text(
-                        ''
+                IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        cameraImage = null;
+                        isWorking = false;
+                      });
+                    })
+              ],
+            ),
+          ),
+          body: Container(
+            child: Column(
+              children: [
+                Center(
+                    child: Container(
+                      color: Colors.blue,
+                      height: 320,
+                      width: MediaQuery.of(context).size.width,
+                      child: cameraImage == null ? SizedBox(
+                      ) :
+                      AspectRatio(
+                        aspectRatio: cameraController.value.aspectRatio ?? 16.0/9.0,
+                        child: CameraPreview(cameraController),
+                      ),
+                    )
+                ),
+                Container(
+                  color: Colors.pink,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 3,
+                  child: Center(
+                    child: FlatButton(
+                      child: Text(
+                          ''
+                      ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
