@@ -1,4 +1,4 @@
-import 'package:cyborg/screens/home.dart';
+import 'package:cyborg/screens/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: CyborgScreen(),
+      home: Choice(),
     );
   }
 }

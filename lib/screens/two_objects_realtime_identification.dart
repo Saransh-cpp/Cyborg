@@ -3,12 +3,12 @@ import 'package:cyborg/main.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 
-class CyborgScreen extends StatefulWidget {
+class Identifying2Objects extends StatefulWidget {
   @override
-  _CyborgScreenState createState() => _CyborgScreenState();
+  _Identifying2ObjectsState createState() => _Identifying2ObjectsState();
 }
 
-class _CyborgScreenState extends State<CyborgScreen> {
+class _Identifying2ObjectsState extends State<Identifying2Objects> {
 
   bool isWorking = false;
   List<dynamic> results;
