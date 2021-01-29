@@ -11,7 +11,7 @@ class CyborgScreen extends StatefulWidget {
 class _CyborgScreenState extends State<CyborgScreen> {
 
   bool isWorking = false;
-  String results = "";
+  List<dynamic> results;
   CameraController cameraController;
   CameraImage cameraImage;
 
@@ -34,10 +34,39 @@ class _CyborgScreenState extends State<CyborgScreen> {
           if(!isWorking){
             isWorking = true,
             cameraImage = image,
+            runModel(),
           }
         });
       });
     });
+  }
+
+  runModel() async{
+    if(cameraImage != null){
+      var recognition = await Tflite.runModelOnFrame(
+          bytesList: cameraImage.planes.map((e) {
+            return e.bytes;
+          }
+          ).toList(),
+        imageHeight: cameraImage.height,
+        imageWidth: cameraImage.width,
+        imageMean: 127.5,
+        rotation: 90,
+        imageStd: 127.5,
+        numResults: 2,
+        threshold: 0.1,
+        asynch: true
+      );
+
+      recognition.forEach((element) {
+        setState(() {
+          results.add("${element['label']} ${(element['confidence'] as double).toStringAsFixed(2)}\n\n") ;
+          print(results);
+        });
+      });
+
+      isWorking = false;
+    }
   }
 
   @override
@@ -50,7 +79,7 @@ class _CyborgScreenState extends State<CyborgScreen> {
   void dispose() async{
     super.dispose();
     await Tflite.close();
-    cameraController.dispose();
+    cameraController?.dispose();
   }
 
   @override
@@ -108,12 +137,26 @@ class _CyborgScreenState extends State<CyborgScreen> {
                       .size
                       .height / 3,
                   child: Center(
-                    child: FlatButton(
-                      child: Text(
-                          ''
-                      ),
-                      onPressed: () {},
-                    ),
+                    child: ListView(
+                      children:
+                        results != null ?
+                            results.map((e){
+                              return Text(
+                                '${e['label']}: ${(e['confidence'] * 100).toString()}%',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 30
+                                ),
+                              );
+                            }).toList()
+                            : [Text(
+                          'Open Camera',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 30
+                          ),
+                        )],
+                    )
                   ),
                 ),
               ],
