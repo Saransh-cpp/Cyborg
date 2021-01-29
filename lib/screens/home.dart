@@ -36,7 +36,42 @@ class _CyborgScreenState extends State<CyborgScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(),
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.blue,
+                height: MediaQuery.of(context).size.height/3,
+                child: Center(
+                  child: FlatButton(
+                    child: cameraImage == null ? Text(
+                      'Press'
+                    ) :
+                    AspectRatio(
+                        aspectRatio: cameraController.value.aspectRatio,
+                      child: CameraPreview(cameraController),
+                    ),
+                    onPressed: () {
+                      initCamera();
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                color: Colors.pink,
+                height: MediaQuery.of(context).size.height/2,
+                child: Center(
+                  child: FlatButton(
+                    child: Text(
+                        ''
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
